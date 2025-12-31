@@ -64,7 +64,7 @@
         .charmander {
             width: 160px;
             height: 160px;
-            background-image: url('https://wallpapers-clan.com/wp-content/uploads/2024/12/charmander-pokemon-cute-sticker-preview.jpg');
+            background-image: url('https://freepngimg.com/save/117727-charmander-download-hd/612x481');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -155,57 +155,4 @@
 
         let currentStep = 0;
         const currentMessageContainer = document.getElementById('currentMessage');
-        const bigHeart = document.getElementById('bigHeart');
-
-        function showMessage(step) {
-            // 清空舊內容
-            currentMessageContainer.innerHTML = '';
-
-            // 新一行並排
-            const row = document.createElement('div');
-            row.classList.add('message-row');
-
-            // 小火龍
-            const charmanderDiv = document.createElement('div');
-            charmanderDiv.classList.add('charmander-container');
-            charmanderDiv.innerHTML = '<div class="charmander"></div>';
-            row.appendChild(charmanderDiv);
-
-            // 氣泡
-            const bubble = document.createElement('div');
-            bubble.classList.add('speech-bubble');
-            if (step.final) bubble.classList.add('heart');
-            bubble.innerHTML = `<h1>${step.title}</h1><p>${step.msg}</p>`;
-            row.appendChild(bubble);
-
-            currentMessageContainer.appendChild(row);
-
-            // 淡入 + 彈跳
-            setTimeout(() => { 
-                row.style.opacity = 1; 
-                const charmander = row.querySelector('.charmander');
-                charmander.style.animation = 'none';
-                charmander.offsetHeight;
-                charmander.style.animation = 'bounce 0.6s ease-in-out';
-            }, 100);
-
-            if (step.final) bigHeart.style.opacity = 1;
-
-            // 自動滾落
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-        }
-
-        // 第一句自動顯示
-        showMessage(messages[0]);
-        currentStep = 1;
-
-        // 按小火龍觸發下一句
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.charmander-container') && currentStep < messages.length) {
-                showMessage(messages[currentStep]);
-                currentStep++;
-            }
-        });
-    </script>
-</body>
-</html>
+        const bigHeart = document.getElementBy
