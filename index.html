@@ -17,9 +17,9 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            /* 換上穩定的卡通雪景背景圖 */
-            background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), 
-                        url('https://img.freepik.com/free-vector/winter-landscape-with-pines-snow-sunset_1048-11110.jpg');
+            /* 換上暖色調的卡通雪景：粉橘色的夕陽雪地 */
+            background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.2)), 
+                        url('https://img.freepik.com/free-vector/winter-landscape-sunset-forest-nature-background_107791-15830.jpg');
             background-size: cover;
             background-position: center;
         }
@@ -36,7 +36,7 @@
             top: -10px;
             background: white;
             border-radius: 50%;
-            opacity: 0.9;
+            opacity: 0.8;
             animation: fall linear infinite;
         }
         @keyframes fall { to { transform: translateY(110vh); } }
@@ -52,15 +52,15 @@
             max-width: 400px;
         }
 
-        /* 對話框 - 保持第一版的可愛感 */
+        /* 對話框樣式 */
         .dialogue-box {
-            background: rgba(255, 255, 255, 0.98);
+            background: rgba(255, 255, 255, 0.96);
             border-radius: 25px;
-            padding: 25px;
-            width: 85%;
-            min-height: 80px;
+            padding: 22px;
+            width: 82%;
+            min-height: 85px;
             margin-bottom: 40px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 12px 35px rgba(252, 96, 118, 0.2); /* 暖色陰影 */
             position: relative;
             opacity: 0;
             transform: translateY(20px);
@@ -69,7 +69,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            border: 4px solid #FFCB77;
+            border: 4px solid #FFB7B2; /* 暖粉色邊框 */
         }
         .dialogue-box.show {
             opacity: 1;
@@ -83,16 +83,16 @@
             transform: translateX(-50%);
             border-width: 15px 15px 0;
             border-style: solid;
-            border-color: #FFCB77 transparent;
+            border-color: #FFB7B2 transparent;
         }
 
         .message-text {
-            color: #444;
-            font-size: 1.2rem;
+            color: #5D4037; /* 深咖啡色文字更溫和 */
+            font-size: 1.15rem;
             font-weight: 700;
             line-height: 1.6;
         }
-        .highlight { color: #e74c3c; font-weight: bold; }
+        .highlight { color: #FF5252; font-weight: bold; }
 
         /* 小火龍 */
         .character-container {
@@ -102,22 +102,22 @@
         }
         .character-container:active { transform: scale(0.9); }
         .charmander-img {
-            width: 160px; /* 稍微加大一點更可愛 */
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+            width: 160px;
+            filter: drop-shadow(0 10px 15px rgba(255, 138, 128, 0.3));
             animation: breathe 3s infinite ease-in-out;
         }
         @keyframes breathe {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
+            50% { transform: scale(1.06); }
         }
 
         .hint {
             margin-top: 25px;
-            color: #333;
-            background: rgba(255, 255, 255, 0.6);
-            padding: 5px 15px;
+            color: #5D4037;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 6px 18px;
             border-radius: 20px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: bold;
             animation: pulse 2s infinite;
         }
@@ -152,15 +152,15 @@
             snowflake.style.height = size + 'px';
             const duration = Math.random() * 4 + 3;
             snowflake.style.animationDuration = duration + 's';
-            snowflake.style.opacity = Math.random();
+            snowflake.style.opacity = Math.random() * 0.7 + 0.3;
             container.appendChild(snowflake);
             setTimeout(() => snowflake.remove(), duration * 1000);
         }
-        setInterval(createSnow, 100);
+        setInterval(createSnow, 120);
 
-        // 第一版對話內容 (廣東話)
+        // 你更新後的對話內容
         const messages = [
-            "喂～ 仲嬲緊呀？🥺",
+            "喂～ 係唔係仲唔開心緊呀？🥺",
             "哩度好凍呀... 🥶<br>但我個心仲凍過雪地...",
             "其實你知唔知... 👉👈<br>你對我嚟講就好似<br>小火龍條尾咁重要🔥",
             "雖然我有時會任性...<br>有時又會亂諗野...",
@@ -181,7 +181,7 @@
 
             dialogueBox.classList.remove('show');
             
-            // 加入點擊時的小震動
+            // 點擊反饋效果
             const char = document.getElementById('character');
             char.style.transform = 'scale(0.9)';
             setTimeout(() => char.style.transform = 'scale(1)', 100);
@@ -198,4 +198,3 @@
     </script>
 </body>
 </html>
-
