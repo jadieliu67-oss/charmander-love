@@ -3,201 +3,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>我的小火龍 ♡ 雪地告白</title>
+    <title>給親愛的小火龍訓練員</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: url('https://4kwallpapers.com/images/wallpapers/winter-forest-5472x3648-10232.jpg') no-repeat center center fixed;
-            background-size: cover;
-            min-height: 100vh;
-            overflow-y: auto;
-            position: relative;
-            color: #ff6b6b;
+        /* --- 全局設定：手機 App 風格 --- */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* 禁止滾動，像 App 一樣 */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(to bottom, #2c3e50, #3498db); /* 雪夜漸層 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            -webkit-tap-highlight-color: transparent;
         }
-        .snowflakes {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
+
+        /* --- 雪花特效容器 --- */
+        #snow-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* 讓點擊可以穿透雪花 */
             z-index: 1;
         }
+
         .snowflake {
             position: absolute;
-            color: #fff;
-            font-size: 1.5em;
-            animation: fall linear infinite;
+            top: -10px;
+            background-color: white;
+            border-radius: 50%;
             opacity: 0.8;
+            animation: fall linear infinite;
         }
+
         @keyframes fall {
-            0% { transform: translateY(-100vh); }
-            100% { transform: translateY(100vh); }
+            to { transform: translateY(110vh); }
         }
-        .app-container {
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 20px;
+
+        /* --- 主要互動區 --- */
+        .game-area {
             position: relative;
-            z-index: 2;
-        }
-        .instruction {
-            font-size: 18px;
-            text-align: center;
-            margin-bottom: 40px;
-            text-shadow: 0 1px 5px rgba(0,0,0,0.3);
-            background: rgba(255,255,255,0.6);
-            padding: 12px 20px;
-            border-radius: 30px;
-        }
-        .message-row {
+            z-index: 10;
             display: flex;
-            align-items: flex-end;
-            margin-bottom: 50px;
-            opacity: 0;
-            transition: opacity 1s;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
         }
-        .charmander-container {
-            flex-shrink: 0;
-            width: 170px;
-            height: 170px;
-            cursor: pointer;
-        }
-        .charmander {
-            width: 170px;
-            height: 170px;
-            background-image: url('https://www.pngall.com/wp-content/uploads/20/Charmander-Pokemon-PNG-Image.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            animation: bounce 0.6s ease-in-out;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-25px); }
-        }
-        .speech-bubble {
-            margin-left: 20px;
-            background: rgba(255, 255, 255, 0.92);
-            color: #333;
-            padding: 22px 32px;
-            border-radius: 30px;
-            max-width: 90%;
+
+        /* --- 對話框樣式 (RPG Game Style) --- */
+        .dialogue-box {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            width: 80%;
+            min-height: 80px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             position: relative;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
-        .speech-bubble::after {
+
+        .dialogue-box.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dialogue-box::after {
             content: '';
             position: absolute;
-            left: -20px;
-            top: 40px;
-            border: 20px solid transparent;
-            border-right-color: rgba(255, 255, 255, 0.92);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: white transparent;
         }
-        .speech-bubble.heart {
-            background: rgba(255, 182, 193, 0.95);
+
+        .message-text {
+            color: #333;
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.5;
         }
-        .speech-bubble.heart::after {
-            border-right-color: rgba(255, 182, 193, 0.95);
+
+        /* 特別強調的文字顏色 */
+        .highlight {
+            color: #e74c3c; /* 紅色 */
         }
-        h1 {
-            font-size: 23px;
-            margin-bottom: 10px;
-            color: #ff4444;
+
+        /* --- 小火龍角色容器 --- */
+        .character-container {
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.1s;
         }
-        p {
-            font-size: 18px;
-            line-height: 1.8;
+
+        .character-container:active {
+            transform: scale(0.95); /* 點擊時縮小 */
         }
-        .big-heart {
-            font-size: 70px;
-            text-align: center;
-            margin: 60px 0;
-            animation: pulse 1.5s infinite;
-            opacity: 0;
+
+        /* 小火龍圖片樣式 */
+        .charmander-img {
+            width: 180px;
+            height: auto;
+            /* 簡單的 CSS 動畫模擬走路的彈跳感 */
+            animation: bounce 0.8s infinite alternate ease-in-out;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.3));
         }
-        @keyframes pulse {
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
+        /* 點擊時的特效動畫 Class */
+        .bump {
+            animation: bump-anim 0.3s ease-out;
+        }
+
+        @keyframes bump-anim {
             0% { transform: scale(1); }
-            50% { transform: scale(1.3); }
+            50% { transform: scale(1.1) rotate(5deg); }
             100% { transform: scale(1); }
         }
+
+        /* --- 提示文字 --- */
+        .hint {
+            margin-top: 40px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
     </style>
 </head>
 <body>
-    <div class="snowflakes" id="snowflakes"></div>
-    <div class="app-container">
-        <div class="instruction">按一下小火龍聽佢講下一句話呀 ♡</div>
-        
-        <div id="currentMessage"></div>
-        
-        <div class="big-heart" id="bigHeart">❤️</div>
+
+    <div id="snow-container"></div>
+
+    <div class="game-area">
+        <div class="dialogue-box" id="dialogueBox">
+            <span class="message-text" id="messageText">...</span>
+        </div>
+
+        <div class="character-container" id="character" onclick="nextMessage()">
+            
+            <img src="https://media.tenor.com/fTTVGyg1ZzkAAAAi/charmander-pokemon.gif" alt="Charmander" class="charmander-img">
+        </div>
+
+        <div class="hint">點一下小火龍 (Tap Me!)</div>
     </div>
 
     <script>
-        // 雪花效果
-        const snowflakesContainer = document.getElementById('snowflakes');
-        for (let i = 0; i < 60; i++) {
-            const snow = document.createElement('div');
-            snow.classList.add('snowflake');
-            snow.innerText = ['❄', '♡', '❅', '💖'][Math.floor(Math.random()*4)];
-            snow.style.left = Math.random() * 100 + 'vw';
-            snow.style.animationDuration = 8 + Math.random() * 12 + 's';
-            snow.style.animationDelay = Math.random() * 10 + 's';
-            snow.style.fontSize = 1 + Math.random() * 1.8 + 'em';
-            snowflakesContainer.appendChild(snow);
+        // --- 1. 雪花生成邏輯 ---
+        function createSnow() {
+            const container = document.getElementById('snow-container');
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            
+            // 隨機位置與大小
+            snowflake.style.left = Math.random() * 100 + 'vw';
+            snowflake.style.width = (Math.random() * 5 + 2) + 'px';
+            snowflake.style.height = snowflake.style.width;
+            
+            // 隨機動畫時間
+            const duration = Math.random() * 3 + 2;
+            snowflake.style.animationDuration = duration + 's';
+            
+            container.appendChild(snowflake);
+
+            // 動畫結束後移除元素，避免記憶體洩漏
+            setTimeout(() => {
+                snowflake.remove();
+            }, duration * 1000);
         }
 
+        // 每 100 毫秒產生一片雪花
+        setInterval(createSnow, 100);
+
+        // --- 2. 對話內容設定 (廣東話) ---
+        // 你可以在這裡修改你想說的話
         const messages = [
-            { title: "喂！我的小火龍 ♡", msg: "你知唔知，你成日都好似小火龍咁可愛，尾巴上的火焰永遠都咁溫暖，照亮晒我嘅世界～" },
-            { title: "你對我好重要好重要架!", msg: "你唔單止係我最最最喜歡嘅拍檔！無咗你，我嘅冒險就會少咗好多樂趣同動力架啦。" },
-            { title: "你係我成長同努力的動力", msg: "因為有你，我先想變得更好、更強！我想同你一齊進化到最高形態，一起打敗所有難關。" },
-            { title: "我會努力信任你", msg: "有時我會擔心尾巴火焰熄咗，但其實我知你永遠都會喺度。我會更加努力去相信你，因為你值得呢~" },
-            { title: "B，原諒我啦 ♡", msg: "我好鍾意你，想同你繼續呢場冒險。<br>可唔可以... 比我氹返呀？", final: true }
+            "喂～ 仲嬲緊呀？🥺",
+            "哩度好凍呀... 🥶<br>但我個心仲凍過雪地...",
+            "其實你知唔知... 👉👈<br>你對我嚟講就好似<br>小火龍條尾咁重要🔥",
+            "雖然我有時會任性...<br>有時又會亂諗野...",
+            "但我真係好驚失去你架！😣",
+            "我應承你... 🤙<br>我會努力去<span class='highlight'>信任你多啲</span>！",
+            "唔好再懷疑我對你嘅愛啦～<br>我地個火唔好熄好無？🥺",
+            "笑返啦～ 錫返！😘<br>❤️ Love You ❤️"
         ];
 
-        let currentStep = 0;
-        const currentMessageContainer = document.getElementById('currentMessage');
-        const bigHeart = document.getElementById('bigHeart');
+        let currentIndex = -1;
+        const dialogueBox = document.getElementById('dialogueBox');
+        const messageText = document.getElementById('messageText');
+        const character = document.getElementById('character');
+        const hint = document.querySelector('.hint');
 
-        function showMessage(step) {
-            currentMessageContainer.innerHTML = '';
+        // --- 3. 互動邏輯 ---
+        function nextMessage() {
+            // 增加索引
+            currentIndex++;
 
-            const row = document.createElement('div');
-            row.classList.add('message-row');
-
-            const charmanderDiv = document.createElement('div');
-            charmanderDiv.classList.add('charmander-container');
-            charmanderDiv.innerHTML = '<div class="charmander"></div>';
-            row.appendChild(charmanderDiv);
-
-            const bubble = document.createElement('div');
-            bubble.classList.add('speech-bubble');
-            if (step.final) bubble.classList.add('heart');
-            bubble.innerHTML = `<h1>${step.title}</h1><p>${step.msg}</p>`;
-            row.appendChild(bubble);
-
-            currentMessageContainer.appendChild(row);
-
-            setTimeout(() => { 
-                row.style.opacity = 1; 
-                const charmander = row.querySelector('.charmander');
-                charmander.style.animation = 'none';
-                charmander.offsetHeight;
-                charmander.style.animation = 'bounce 0.6s ease-in-out';
-            }, 100);
-
-            if (step.final) bigHeart.style.opacity = 1;
-
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-        }
-
-        showMessage(messages[0]);
-        currentStep = 1;
-
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.charmander-container') && currentStep < messages.length) {
-                showMessage(messages[currentStep]);
-                currentStep++;
+            // 如果是對話結束，重置或顯示最後一句
+            if (currentIndex >= messages.length) {
+                currentIndex = 0; // 循環播放，或者你可以改成停在最後一句
             }
-        });
+
+            // 1. 小火龍動態：加入 bump class 產生彈跳效果
+            character.classList.remove('bump');
+            void character.offsetWidth; // 觸發重繪 (Reflow)
+            character.classList.add('bump');
+
+            // 2. 對話框動畫：先隱藏，改字，再顯示
+            dialogueBox.classList.remove('show');
+            
+            setTimeout(() => {
+                messageText.innerHTML = messages[currentIndex];
+                dialogueBox.classList.add('show');
+            }, 200);
+
+            // 隱藏提示文字，讓畫面更乾淨
+            if(currentIndex === 0) {
+                hint.style.display = 'none';
+            }
+        }
     </script>
 </body>
 </html>
