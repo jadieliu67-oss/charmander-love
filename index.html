@@ -45,14 +45,42 @@
             align-items: center;
             text-align: center;
             scroll-snap-align: start;
+            position: relative;
+            overflow: hidden;
         }
-        .charmander {
+        .charmander-container {
+            width: 220px;
+            height: 220px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .charmander-walking {
+            width: 180px;
+            height: 180px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            position: absolute;
+            left: -200px;
+            top: 20px;
+            animation: walkIn 2s ease-out forwards;
+        }
+        .charmander-static {
             width: 220px;
             height: 220px;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            margin-bottom: 30px;
+            opacity: 0;
+            animation: appear 0.5s 2s forwards;
+        }
+        @keyframes walkIn {
+            0% { left: -200px; }
+            100% { left: 20px; }
+        }
+        @keyframes appear {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
         }
         h1 {
             font-size: 28px;
@@ -100,35 +128,50 @@
         <div class="slides" id="slides">
             <!-- 第1頁 -->
             <section class="slide">
-                <div class="charmander" style="background-image: url('https://www.nicepng.com/png/detail/757-7577296_charmander-from-the-official-artwork-set-for-pokemon.png');"></div>
+                <div class="charmander-container">
+                    <div class="charmander-walking" style="background-image: url('https://i.pinimg.com/originals/70/dc/a3/70dca3d991a01040f7cf191d063e918b.gif');"></div>
+                    <div class="charmander-static" style="background-image: url('https://wallpapers-clan.com/wp-content/uploads/2024/12/charmander-pokemon-cute-sticker-preview.jpg');"></div>
+                </div>
                 <h1>喂！我的小火龍 ♡</h1>
                 <p>你知唔知，你成日都好似小火龍咁可愛，尾巴上的火焰永遠都咁溫暖，照亮晒我嘅世界～</p>
             </section>
 
             <!-- 第2頁 -->
             <section class="slide">
-                <div class="charmander" style="background-image: url('https://wallpapers-clan.com/wp-content/uploads/2024/12/charmander-pokemon-cute-sticker-preview.jpg');"></div>
+                <div class="charmander-container">
+                    <div class="charmander-walking" style="background-image: url('https://i.pinimg.com/originals/4b/80/c0/4b80c01ccd0042f9b397924752a79661.gif');"></div>
+                    <div class="charmander-static" style="background-image: url('https://www.clipartmax.com/png/middle/296-2961144_pok%C3%A9mon-pokemon-cute-charmander.png');"></div>
+                </div>
                 <h1>你對我好重要好重要架!</h1>
                 <p>你唔單止係我最最最喜歡嘅拍檔！無咗你，我嘅冒險就會少咗好多樂趣同動力架啦。</p>
             </section>
 
             <!-- 第3頁 -->
             <section class="slide">
-                <div class="charmander" style="background-image: url('https://www.clipartmax.com/png/middle/296-2961144_pok%C3%A9mon-pokemon-cute-charmander.png');"></div>
+                <div class="charmander-container">
+                    <div class="charmander-walking" style="background-image: url('https://64.media.tumblr.com/115055006737d4eb1e681aadb37bb234/tumblr_nrshpmyUyi1twsctco1_1280.gif');"></div>
+                    <div class="charmander-static" style="background-image: url('https://wallpapers.com/images/hd/cute-charmander-31cs90faop2k028n.jpg');"></div>
+                </div>
                 <h1>你係我成長同努力的動力</h1>
                 <p>因為有你，我先想變得更好、更強！我想同你一齊進化到最高形態，一起打敗所有難關。</p>
             </section>
 
             <!-- 第4頁 -->
             <section class="slide">
-                <div class="charmander" style="background-image: url('https://i.pinimg.com/736x/78/a8/7e/78a87e82f663bb8b6d098a25472749f0.jpg');"></div>
+                <div class="charmander-container">
+                    <div class="charmander-walking" style="background-image: url('https://i.pinimg.com/originals/12/64/6e/12646e2c92d781e40fab08e78130ceaa.gif');"></div>
+                    <div class="charmander-static" style="background-image: url('https://image.pngaaa.com/192/2103192-middle.png');"></div>
+                </div>
                 <h1>我會努力信任你</h1>
                 <p>有時我會擔心尾巴火焰熄咗，但其實我知你永遠都會喺度。我會更加努力去相信你，因為你值得呢。</p>
             </section>
 
             <!-- 第5頁（結束） -->
             <section class="slide">
-                <div class="charmander" style="background-image: url('https://cdn.weasyl.com/static/media/b3/3e/8b/b33e8be90b0d00af8d6303646710f8ade13d0e4ea44e00380e57bea88ea9c43e.png');"></div>
+                <div class="charmander-container">
+                    <div class="charmander-walking" style="background-image: url('https://i.pinimg.com/originals/70/dc/a3/70dca3d991a01040f7cf191d063e918b.gif');"></div>
+                    <div class="charmander-static" style="background-image: url('https://wallpapers-clan.com/wp-content/uploads/2025/04/pokemon-charmander-wink-hat-sticker-preview.jpg');"></div>
+                </div>
                 <h1>B，原諒我啦 ♡</h1>
                 <p>我好鍾意你，想同你繼續呢場 Pokémon 冒險。<br>可唔可以... 氹返我呀？<br><br><span class="heart">❤️</span></p>
             </section>
@@ -153,12 +196,24 @@
             dotsContainer.appendChild(dot);
         }
 
-        // 監聽滑動更新小圓點
+        // 監聽滑動更新小圓點 + 重啟動畫
         slides.addEventListener('scroll', () => {
             const scrollPosition = slides.scrollLeft + slides.clientWidth / 2;
             const currentIndex = Math.round(scrollPosition / slides.clientWidth);
             document.querySelectorAll('.dot').forEach((dot, index) => {
                 dot.classList.toggle('active', index === currentIndex);
+            });
+
+            // 重啟小火龍行入動畫
+            document.querySelectorAll('.charmander-walking').forEach(el => {
+                el.style.animation = 'none';
+                el.offsetHeight;
+                el.style.animation = 'walkIn 2s ease-out forwards';
+            });
+            document.querySelectorAll('.charmander-static').forEach(el => {
+                el.style.animation = 'none';
+                el.offsetHeight;
+                el.style.animation = 'appear 0.5s 2s forwards';
             });
         });
     </script>
