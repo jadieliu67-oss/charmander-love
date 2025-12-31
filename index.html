@@ -3,144 +3,221 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>小火龍的溫暖承諾</title>
+    <title>小火龍的真心話</title>
     <style>
+        /* 全局設定 */
         body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            overflow: hidden; font-family: sans-serif;
-            /* 深藍色的雪夜背景 */
-            background: linear-gradient(to bottom, #1a2a6c, #b21f1f, #fdbb2d);
-            background-attachment: fixed;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* 使用你提供的插畫作為背景，並加入漸層濾鏡確保文字清晰 */
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), 
+                        url('https://i.pinimg.com/736x/21/e2/0f/21e20f305b380295834927770e284988.jpg');
+            background-size: cover;
+            background-position: center;
         }
 
-        /* --- 飄雪效果 --- */
-        .snow {
-            position: absolute; top: -10px; background: white; border-radius: 50%;
-            pointer-events: none; animation: fall linear infinite; z-index: 1;
+        /* 飄雪效果 */
+        #snow-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: fall linear infinite;
         }
         @keyframes fall { to { transform: translateY(110vh); } }
 
-        /* --- 地面與火堆 --- */
-        .ground {
-            position: absolute; bottom: 0; width: 100%; height: 20vh;
-            background: #f0f0f0; border-top: 5px solid #ddd; z-index: 2;
-        }
-
+        /* 火堆動畫 (Campfire) */
         .campfire {
-            position: absolute; bottom: 15vh; left: 65%; transform: translateX(-50%);
-            z-index: 3;
+            position: absolute;
+            bottom: 10%;
+            right: 15%;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        /* 火苗動畫 */
         .flame {
-            width: 40px; height: 40px; background: #ff4500;
-            border-radius: 50% 0 50% 50%; transform: rotate(-45deg);
-            animation: flicker 0.1s infinite alternate;
-            box-shadow: 0 0 20px #ff4500, 0 0 40px #ff8c00;
+            width: 35px;
+            height: 35px;
+            background: #ff5e00;
+            border-radius: 50% 0 50% 50%;
+            transform: rotate(-45deg);
+            animation: flicker 0.15s infinite alternate;
+            box-shadow: 0 0 20px #ff4500, 0 0 40px #ffcc00;
         }
         @keyframes flicker {
             0% { transform: rotate(-45deg) scale(1); opacity: 0.8; }
-            100% { transform: rotate(-45deg) scale(1.1); opacity: 1; }
+            100% { transform: rotate(-45deg) scale(1.2); opacity: 1; }
         }
-        .wood {
-            width: 50px; height: 10px; background: #5d4037;
-            border-radius: 5px; position: absolute; bottom: -5px; left: -5px;
+        .log {
+            width: 45px;
+            height: 8px;
+            background: #5d4037;
+            border-radius: 4px;
+            margin-top: -5px;
         }
 
-        /* --- 遊戲主區域 --- */
+        /* 遊戲區域 */
         .game-area {
-            position: relative; z-index: 10; display: flex;
-            flex-direction: column; align-items: center; width: 100%;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
         }
 
+        /* 對話框 - 回復第一版的可愛感 */
         .dialogue-box {
-            background: white; border-radius: 20px; padding: 20px;
-            width: 80%; max-width: 300px; min-height: 60px;
-            margin-bottom: 50px; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            display: flex; align-items: center; justify-content: center;
-            text-align: center; opacity: 0; transition: 0.3s;
-            border: 4px solid #ffcb05; font-weight: bold; color: #333;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            width: 80%;
+            min-height: 80px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: 3px solid #FFCB77;
         }
-        .dialogue-box.show { opacity: 1; transform: translateY(0); }
+        .dialogue-box.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .dialogue-box::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 12px 12px 0;
+            border-style: solid;
+            border-color: #FFCB77 transparent;
+        }
 
-        /* 小火龍 Container */
-        .character-box {
-            position: relative; cursor: pointer;
+        .message-text {
+            color: #333;
+            font-size: 1.15rem;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+        .highlight { color: #e74c3c; font-weight: bold; }
+
+        /* 小火龍 */
+        .character-container {
+            cursor: pointer;
+            position: relative;
             transition: transform 0.1s;
         }
-        .charmander {
-            width: 150px; /* 加大咗隻小火龍 */
-            filter: drop-shadow(0 0 10px rgba(255,165,0,0.5));
+        .character-container:active { transform: scale(0.9); }
+        .charmander-img {
+            width: 140px;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.3));
+            animation: breathe 2s infinite ease-in-out;
+        }
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .hint {
-            color: white; margin-top: 20px; font-size: 0.9rem;
-            text-shadow: 1px 1px 5px black; animation: pulse 2s infinite;
+            margin-top: 20px;
+            color: white;
+            font-size: 0.9rem;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+            animation: pulse 2s infinite;
         }
         @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
-
     </style>
 </head>
 <body>
 
-    <div class="ground"></div>
-    
+    <div id="snow-container"></div>
+
     <div class="campfire">
         <div class="flame"></div>
-        <div class="wood"></div>
-        <div class="wood" style="transform: rotate(20deg);"></div>
+        <div class="log"></div>
     </div>
 
     <div class="game-area">
-        <div class="dialogue-box" id="box">
-            <span id="text">...</span>
+        <div class="dialogue-box" id="dialogueBox">
+            <span class="message-text" id="messageText">...</span>
         </div>
 
-        <div class="character-box" onclick="talk()">
-            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/4.gif" class="charmander" alt="小火龍">
+        <div class="character-container" id="character" onclick="nextMessage()">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/4.gif" alt="Charmander" class="charmander-img">
         </div>
-        
-        <div class="hint">點一下小火龍，聽佢講嘢 ❤️</div>
+
+        <div class="hint">點點小火龍，聽聽我的心聲 ❤️</div>
     </div>
 
     <script>
-        // 飄雪特效
+        // 雪花生成
         function createSnow() {
-            const snow = document.createElement('div');
-            snow.className = 'snow';
-            snow.style.left = Math.random() * 100 + 'vw';
-            snow.style.width = snow.style.height = Math.random() * 5 + 2 + 'px';
-            const dur = Math.random() * 3 + 2;
-            snow.style.animationDuration = dur + 's';
-            document.body.appendChild(snow);
-            setTimeout(() => snow.remove(), dur * 1000);
+            const container = document.getElementById('snow-container');
+            const snowflake = document.createElement('div');
+            snowflake.className = 'snowflake';
+            snowflake.style.left = Math.random() * 100 + 'vw';
+            const size = Math.random() * 4 + 2;
+            snowflake.style.width = size + 'px';
+            snowflake.style.height = size + 'px';
+            const duration = Math.random() * 3 + 2;
+            snowflake.style.animationDuration = duration + 's';
+            container.appendChild(snowflake);
+            setTimeout(() => snowflake.remove(), duration * 1000);
         }
-        setInterval(createSnow, 100);
+        setInterval(createSnow, 150);
 
-        // 對話內容
-        const lines = [
-            "雖然出面落緊雪... ❄️",
-            "但只要對住個火堆，同埋對住你...",
-            "我就覺得好溫暖喇 🔥",
-            "對唔住啊，我唔應該亂發脾氣...",
-            "我知我仲有好多野要學習...",
-            "特別係點樣去更加<span style='color:red'>信任你</span> 🤝",
-            "俾個機會我，好似小火龍咁守護你呀？🥺",
-            "錫返啖，唔好嬲啦好嗎？❤️"
+        // 第一版對話內容 (廣東話)
+        const messages = [
+            "喂～ 仲嬲緊呀？🥺",
+            "哩度好凍呀... 🥶<br>但我個心仲凍過雪地...",
+            "其實你知唔知... 👉👈<br>你對我嚟講就好似<br>小火龍條尾咁重要🔥",
+            "雖然我有時會任性...<br>有時又會亂諗野...",
+            "但我真係好驚失去你架！😣",
+            "我應承你... 🤙<br>我會努力去<span class='highlight'>信任你多啲</span>！",
+            "唔好再懷疑我對你嘅愛啦～<br>我地個火唔好熄好無？🥺",
+            "笑返啦～ 錫返！😘<br>❤️ Love You ❤️"
         ];
 
-        let step = 0;
-        function talk() {
-            const box = document.getElementById('box');
-            const txt = document.getElementById('text');
-            
-            box.classList.remove('show');
-            
+        let currentIndex = -1;
+        const dialogueBox = document.getElementById('dialogueBox');
+        const messageText = document.getElementById('messageText');
+        const hint = document.querySelector('.hint');
+
+        function nextMessage() {
+            currentIndex++;
+            if (currentIndex >= messages.length) currentIndex = 0;
+
+            dialogueBox.classList.remove('show');
             setTimeout(() => {
-                txt.innerHTML = lines[step];
-                box.classList.add('show');
-                step = (step + 1) % lines.length;
-            }, 100);
+                messageText.innerHTML = messages[currentIndex];
+                dialogueBox.classList.add('show');
+            }, 200);
+
+            if(currentIndex === 0) hint.style.display = 'none';
         }
     </script>
 </body>
