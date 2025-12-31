@@ -155,4 +155,49 @@
 
         let currentStep = 0;
         const currentMessageContainer = document.getElementById('currentMessage');
-        const bigHeart = document.getElementBy
+        const bigHeart = document.getElementById('bigHeart');
+
+        function showMessage(step) {
+            currentMessageContainer.innerHTML = '';
+
+            const row = document.createElement('div');
+            row.classList.add('message-row');
+
+            const charmanderDiv = document.createElement('div');
+            charmanderDiv.classList.add('charmander-container');
+            charmanderDiv.innerHTML = '<div class="charmander"></div>';
+            row.appendChild(charmanderDiv);
+
+            const bubble = document.createElement('div');
+            bubble.classList.add('speech-bubble');
+            if (step.final) bubble.classList.add('heart');
+            bubble.innerHTML = `<h1>${step.title}</h1><p>${step.msg}</p>`;
+            row.appendChild(bubble);
+
+            currentMessageContainer.appendChild(row);
+
+            setTimeout(() => { 
+                row.style.opacity = 1; 
+                const charmander = row.querySelector('.charmander');
+                charmander.style.animation = 'none';
+                charmander.offsetHeight;
+                charmander.style.animation = 'bounce 0.6s ease-in-out';
+            }, 100);
+
+            if (step.final) bigHeart.style.opacity = 1;
+
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        showMessage(messages[0]);
+        currentStep = 1;
+
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.charmander-container') && currentStep < messages.length) {
+                showMessage(messages[currentStep]);
+                currentStep++;
+            }
+        });
+    </script>
+</body>
+</html>
