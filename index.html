@@ -8,14 +8,13 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', sans-serif;
-            background: url('https://i.pinimg.com/originals/9b/07/1b/9b071b0d8a9e9c9f0b5e5c1e2f3d4e5f.jpg') no-repeat center center fixed;
+            background: url('https://i.pinimg.com/originals/68/8b/3b/688b3b0d8f8e9c9f0b5e5c1e2f3d4e5f.jpg') no-repeat center center fixed;
             background-size: cover;
             min-height: 100vh;
-            overflow-y: scroll; /* 允許滾動 */
+            overflow-y: scroll;
             position: relative;
             color: #ff6b6b;
         }
-        /* 雪花效果 */
         .snowflakes {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -44,66 +43,66 @@
         .instruction {
             font-size: 20px;
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
             text-shadow: 0 1px 5px rgba(0,0,0,0.3);
-            background: rgba(255,255,255,0.5);
-            padding: 10px 20px;
+            background: rgba(255,255,255,0.6);
+            padding: 12px 24px;
             border-radius: 30px;
         }
         .charmander {
-            width: 180px;
-            height: 180px;
+            width: 220px;
+            height: 220px;
+            background-image: url('https://i.ibb.co.com/0jZ5Yk Charmander-transparent.png'); /* 你呢隻小火龍透明版 */
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQesF1JuvBqFeEc6rdRN6K0VHOiRbJ_5j4TH-NzBlCsz29ZzRl-wlOSq8&usqp=CAU'); /* 你那張 remove bg 後 */
             position: relative;
-            left: 20px;
+            left: 10px;
             cursor: pointer;
-            transition: margin-top 1.5s ease-out;
+            transition: margin-top 1.8s ease-out;
             z-index: 3;
         }
         .speech-bubble {
-            margin-left: 220px;
-            margin-top: -150px;
-            background: rgba(255, 255, 255, 0.9);
+            margin-left: 240px;
+            margin-top: -180px;
+            background: rgba(255, 255, 255, 0.92);
             color: #333;
-            padding: 15px 25px;
+            padding: 18px 28px;
             border-radius: 30px;
             max-width: 70%;
             position: relative;
             opacity: 0;
             transition: opacity 1s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            margin-bottom: 200px; /* 留空間給下一格 */
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            margin-bottom: 250px;
         }
         .speech-bubble::after {
             content: '';
             position: absolute;
             left: -20px;
-            top: 30px;
+            top: 40px;
             border: 20px solid transparent;
-            border-right-color: rgba(255, 255, 255, 0.9);
+            border-right-color: rgba(255, 255, 255, 0.92);
         }
         .speech-bubble.heart {
-            background: rgba(255, 182, 193, 0.9);
+            background: rgba(255, 182, 193, 0.95);
         }
         .speech-bubble.heart::after {
-            border-right-color: rgba(255, 182, 193, 0.9);
+            border-right-color: rgba(255, 182, 193, 0.95);
         }
         h1 {
-            font-size: 26px;
-            margin: 10px 0;
+            font-size: 27px;
+            margin-bottom: 8px;
             color: #ff4444;
         }
         p {
-            font-size: 18px;
-            line-height: 1.5;
+            font-size: 19px;
+            line-height: 1.6;
         }
         .big-heart {
-            font-size: 60px;
+            font-size: 70px;
             text-align: center;
-            margin: 50px 0;
+            margin: 60px 0;
             animation: pulse 1.5s infinite;
             opacity: 0;
         }
@@ -124,7 +123,7 @@
     </div>
 
     <script>
-        // 雪花
+        // 雪花效果
         const snowflakesContainer = document.getElementById('snowflakes');
         for (let i = 0; i < 60; i++) {
             const snow = document.createElement('div');
@@ -151,7 +150,6 @@
         const container = document.getElementById('container');
         const bigHeart = document.getElementById('bigHeart');
 
-        // 自動顯示第一句
         function addBubble(step) {
             const bubble = document.createElement('div');
             bubble.classList.add('speech-bubble');
@@ -160,24 +158,22 @@
             bubblesContainer.appendChild(bubble);
             setTimeout(() => { bubble.style.opacity = 1; }, 100);
 
-            if (step.final) {
-                bigHeart.style.opacity = 1;
-            }
+            if (step.final) bigHeart.style.opacity = 1;
         }
 
+        // 第一句自動出現
         addBubble(messages[0]);
         currentStep = 1;
 
+        // 按小火龍跳落 + 出下一句
         charmander.addEventListener('click', () => {
             if (currentStep >= messages.length) return;
 
-            // 小火龍跳落一格
-            charmander.style.marginTop = (currentStep * 300) + 'px';
+            charmander.style.marginTop = (currentStep * 320) + 'px';
 
-            // 加新氣泡
             addBubble(messages[currentStep]);
 
-            // 自動 smooth scroll 落去見到新氣泡
+            // 自動滾落去見到新氣泡
             container.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
             currentStep++;
