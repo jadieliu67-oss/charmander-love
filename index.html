@@ -17,11 +17,21 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            /* 換上暖色調的卡通雪景：粉橘色的夕陽雪地 */
-            background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.2)), 
-                        url('https://img.freepik.com/free-vector/winter-landscape-sunset-forest-nature-background_107791-15830.jpg');
-            background-size: cover;
-            background-position: center;
+            /* 解決格仔問題：改用 CSS 繪製溫暖的落日雪原漸層 */
+            background: linear-gradient(to bottom, #FF8E53, #FE6B8B, #FFB7B2);
+            position: relative;
+        }
+
+        /* 繪製簡單的白色雪地地平線 (手機看更像卡通場景) */
+        body::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            width: 150%;
+            height: 25vh;
+            background: #FFFFFF;
+            border-radius: 50% 50% 0 0;
+            z-index: 1;
         }
 
         /* 飄雪效果 */
@@ -29,7 +39,7 @@
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
-            z-index: 1;
+            z-index: 2;
         }
         .snowflake {
             position: absolute;
@@ -50,6 +60,7 @@
             align-items: center;
             width: 100%;
             max-width: 400px;
+            padding-bottom: 5vh;
         }
 
         /* 對話框樣式 */
@@ -59,8 +70,8 @@
             padding: 22px;
             width: 82%;
             min-height: 85px;
-            margin-bottom: 40px;
-            box-shadow: 0 12px 35px rgba(252, 96, 118, 0.2); /* 暖色陰影 */
+            margin-bottom: 35px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
             position: relative;
             opacity: 0;
             transform: translateY(20px);
@@ -69,7 +80,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            border: 4px solid #FFB7B2; /* 暖粉色邊框 */
+            border: 4px solid #FFB7B2;
         }
         .dialogue-box.show {
             opacity: 1;
@@ -87,7 +98,7 @@
         }
 
         .message-text {
-            color: #5D4037; /* 深咖啡色文字更溫和 */
+            color: #5D4037;
             font-size: 1.15rem;
             font-weight: 700;
             line-height: 1.6;
@@ -102,8 +113,8 @@
         }
         .character-container:active { transform: scale(0.9); }
         .charmander-img {
-            width: 160px;
-            filter: drop-shadow(0 10px 15px rgba(255, 138, 128, 0.3));
+            width: 150px;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1));
             animation: breathe 3s infinite ease-in-out;
         }
         @keyframes breathe {
@@ -115,10 +126,11 @@
             margin-top: 25px;
             color: #5D4037;
             background: rgba(255, 255, 255, 0.7);
-            padding: 6px 18px;
-            border-radius: 20px;
+            padding: 8px 20px;
+            border-radius: 25px;
             font-size: 0.9rem;
             font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             animation: pulse 2s infinite;
         }
         @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
@@ -147,18 +159,18 @@
             const snowflake = document.createElement('div');
             snowflake.className = 'snowflake';
             snowflake.style.left = Math.random() * 100 + 'vw';
-            const size = Math.random() * 5 + 3;
+            const size = Math.random() * 4 + 3;
             snowflake.style.width = size + 'px';
             snowflake.style.height = size + 'px';
             const duration = Math.random() * 4 + 3;
             snowflake.style.animationDuration = duration + 's';
-            snowflake.style.opacity = Math.random() * 0.7 + 0.3;
+            snowflake.style.opacity = Math.random() * 0.6 + 0.4;
             container.appendChild(snowflake);
             setTimeout(() => snowflake.remove(), duration * 1000);
         }
-        setInterval(createSnow, 120);
+        setInterval(createSnow, 150);
 
-        // 你更新後的對話內容
+        // 對話內容
         const messages = [
             "喂～ 係唔係仲唔開心緊呀？🥺",
             "哩度好凍呀... 🥶<br>但我個心仲凍過雪地...",
@@ -181,7 +193,6 @@
 
             dialogueBox.classList.remove('show');
             
-            // 點擊反饋效果
             const char = document.getElementById('character');
             char.style.transform = 'scale(0.9)';
             setTimeout(() => char.style.transform = 'scale(1)', 100);
@@ -192,7 +203,7 @@
             }, 200);
 
             if(currentIndex === 0) {
-                hint.style.visibility = 'hidden';
+                hint.style.display = 'none';
             }
         }
     </script>
