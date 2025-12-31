@@ -2,13 +2,13 @@
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>我的小火龍 ♡ 雪地告白</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', sans-serif;
-            background: url('https://i.pinimg.com/originals/68/8b/3b/688b3b0d8f8e9c9f0b5e5c1e2f3d4e5f.jpg') no-repeat center center fixed;
+            background: url('https://img.freepik.com/premium-photo/magical-pink-winter-wonderland-with-christmas-trees-snowy-pathway_1150025-115677.jpg') no-repeat center center fixed;
             background-size: cover;
             min-height: 100vh;
             overflow-y: scroll;
@@ -33,48 +33,55 @@
             100% { transform: translateY(100vh); }
         }
         .app-container {
-            max-width: 420px;
+            max-width: 100%;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 30px 20px;
             min-height: 100vh;
             position: relative;
             z-index: 2;
         }
         .instruction {
-            font-size: 19px;
+            font-size: 18px;
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
             text-shadow: 0 1px 5px rgba(0,0,0,0.3);
             background: rgba(255,255,255,0.6);
-            padding: 12px 24px;
+            padding: 12px 20px;
             border-radius: 30px;
         }
-        .charmander {
+        .charmander-container {
+            position: relative;
             width: 220px;
             height: 220px;
-            background-image: url('https://p1.hiclipart.com/preview/896/336/40/charmender-render-pokemon-charmander-png-clipart.jpg');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            position: relative;
-            left: 10px;
             cursor: pointer;
             transition: margin-top 1.8s ease-out;
             z-index: 3;
         }
+        .charmander {
+            width: 220px;
+            height: 220px;
+            background-image: url('https://wallpapers-clan.com/wp-content/uploads/2024/12/charmander-pokemon-cute-sticker-preview.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .bubbles-container {
+            position: relative;
+            margin-top: -200px;
+            padding-left: 240px;
+            min-height: 300px;
+        }
         .speech-bubble {
-            margin-left: 240px;
-            margin-top: -180px;
             background: rgba(255, 255, 255, 0.92);
             color: #333;
-            padding: 20px 30px; /* 加大內邊距 */
+            padding: 20px 32px;
             border-radius: 30px;
-            max-width: 80%; /* 闊咗 */
+            max-width: 85%;
             position: relative;
             opacity: 0;
             transition: opacity 1s;
             box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-            margin-bottom: 280px; /* 留多啲空間給下一格 */
+            margin-bottom: 320px;
         }
         .speech-bubble::after {
             content: '';
@@ -91,13 +98,13 @@
             border-right-color: rgba(255, 182, 193, 0.95);
         }
         h1 {
-            font-size: 22px; /* 細咗 */
+            font-size: 22px;
             margin-bottom: 10px;
             color: #ff4444;
         }
         p {
-            font-size: 17px; /* 細咗 */
-            line-height: 1.7; /* 行距鬆啲 */
+            font-size: 17px;
+            line-height: 1.7;
         }
         .big-heart {
             font-size: 70px;
@@ -115,10 +122,15 @@
 </head>
 <body>
     <div class="snowflakes" id="snowflakes"></div>
-    <div class="app-container" id="container">
+    <div class="app-container">
         <div class="instruction">按一下小火龍聽佢講下一句話呀 ♡</div>
-        <div class="charmander" id="charmander"></div>
-        <div id="bubbles"></div>
+        
+        <div class="charmander-container" id="charmanderContainer">
+            <div class="charmander"></div>
+        </div>
+        
+        <div class="bubbles-container" id="bubbles"></div>
+        
         <div class="big-heart" id="bigHeart">❤️</div>
     </div>
 
@@ -145,9 +157,8 @@
         ];
 
         let currentStep = 0;
-        const charmander = document.getElementById('charmander');
+        const charmanderContainer = document.getElementById('charmanderContainer');
         const bubblesContainer = document.getElementById('bubbles');
-        const container = document.getElementById('container');
         const bigHeart = document.getElementById('bigHeart');
 
         function addBubble(step) {
@@ -165,16 +176,16 @@
         addBubble(messages[0]);
         currentStep = 1;
 
-        // 按小火龍跳落 + 出下一句
-        charmander.addEventListener('click', () => {
+        // 按小火龍：一起向下移動 + 出下一句
+        charmanderContainer.addEventListener('click', () => {
             if (currentStep >= messages.length) return;
 
-            charmander.style.marginTop = (currentStep * 320) + 'px';
+            // 小火龍容器 + 氣泡容器一起向下跳
+            const moveDistance = currentStep * 350;
+            charmanderContainer.style.marginTop = moveDistance + 'px';
+            bubblesContainer.style.marginTop = (moveDistance - 200) + 'px';
 
             addBubble(messages[currentStep]);
-
-            // 自動滾落去見到新氣泡
-            container.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
             currentStep++;
         });
