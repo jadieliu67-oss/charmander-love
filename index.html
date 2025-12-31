@@ -8,19 +8,16 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', sans-serif;
-            background: url('https://i.pinimg.com/736x/02/c0/5f/02c05f68cd33bb10283f2dc30f4f4675.jpg') no-repeat center center fixed;
+            background: url('https://i.pinimg.com/originals/9b/07/1b/9b071b0d8a9e9c9f0b5e5c1e2f3d4e5f.jpg') no-repeat center center fixed;
             background-size: cover;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
+            overflow-y: scroll; /* 允許滾動 */
             position: relative;
             color: #ff6b6b;
         }
         /* 雪花效果 */
         .snowflakes {
-            position: absolute;
+            position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
             z-index: 1;
@@ -37,30 +34,21 @@
             100% { transform: translateY(100vh); }
         }
         .app-container {
-            width: 100%;
             max-width: 420px;
-            height: 100vh;
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(15px);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: flex-start;
-            padding: 40px 30px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
             position: relative;
             z-index: 2;
         }
         .instruction {
             font-size: 20px;
-            margin-bottom: 30px;
+            text-align: center;
+            margin-bottom: 40px;
             text-shadow: 0 1px 5px rgba(0,0,0,0.3);
             background: rgba(255,255,255,0.5);
             padding: 10px 20px;
             border-radius: 30px;
-            align-self: center;
         }
         .charmander {
             width: 180px;
@@ -68,26 +56,26 @@
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            position: absolute;
-            left: 30px;
-            top: 100px; /* 起始左上方 */
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQesF1JuvBqFeEc6rdRN6K0VHOiRbJ_5j4TH-NzBlCsz29ZzRl-wlOSq8&usqp=CAU'); /* 你那張 remove bg 後 */
+            position: relative;
+            left: 20px;
             cursor: pointer;
-            transition: top 1.5s ease-out, background-image 0.5s;
+            transition: margin-top 1.5s ease-out;
             z-index: 3;
         }
         .speech-bubble {
-            position: absolute;
+            margin-left: 220px;
+            margin-top: -150px;
             background: rgba(255, 255, 255, 0.9);
             color: #333;
             padding: 15px 25px;
             border-radius: 30px;
             max-width: 70%;
-            left: 220px;
-            top: 120px;
+            position: relative;
             opacity: 0;
             transition: opacity 1s;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            z-index: 2;
+            margin-bottom: 200px; /* 留空間給下一格 */
         }
         .speech-bubble::after {
             content: '';
@@ -98,8 +86,7 @@
             border-right-color: rgba(255, 255, 255, 0.9);
         }
         .speech-bubble.heart {
-            background: rgba(255, 182, 193, 0.9); /* 粉紅心心泡 */
-            border-radius: 50% 50% 50% 0;
+            background: rgba(255, 182, 193, 0.9);
         }
         .speech-bubble.heart::after {
             border-right-color: rgba(255, 182, 193, 0.9);
@@ -115,11 +102,10 @@
         }
         .big-heart {
             font-size: 60px;
-            position: absolute;
-            right: 50px;
-            bottom: 100px;
-            opacity: 0;
+            text-align: center;
+            margin: 50px 0;
             animation: pulse 1.5s infinite;
+            opacity: 0;
         }
         @keyframes pulse {
             0% { transform: scale(1); }
@@ -130,14 +116,11 @@
 </head>
 <body>
     <div class="snowflakes" id="snowflakes"></div>
-    <div class="app-container">
+    <div class="app-container" id="container">
         <div class="instruction">按一下小火龍聽佢講下一句話呀 ♡</div>
         <div class="charmander" id="charmander"></div>
-        <div class="speech-bubble" id="bubble">
-            <h1 id="title"></h1>
-            <p id="message"></p>
-        </div>
-        <span class="big-heart" id="bigHeart">❤️</span>
+        <div id="bubbles"></div>
+        <div class="big-heart" id="bigHeart">❤️</div>
     </div>
 
     <script>
@@ -155,64 +138,50 @@
         }
 
         const messages = [
-            { title: "喂！我的小火龍 ♡", msg: "你知唔知，你成日都好似小火龍咁可愛，尾巴上的火焰永遠都咁溫暖，照亮晒我嘅世界～", img: "https://p1.hiclipart.com/preview/896/336/40/charmender-render-pokemon-charmander-png-clipart.jpg" },
-            { title: "你對我好重要好重要架!", msg: "你唔單止係我最最最喜歡嘅拍檔！無咗你，我嘅冒險就會少咗好多樂趣同動力架啦。", img: "https://www.clipartmax.com/png/middle/296-2961144_pok%C3%A9mon-pokemon-cute-charmander.png" },
-            { title: "你係我成長同努力的動力", msg: "因為有你，我先想變得更好、更強！我想同你一齊進化到最高形態，一起打敗所有難關。", img: "https://freepngimg.com/save/117727-charmander-download-hd/612x481" },
-            { title: "我會努力信任你", msg: "有時我會擔心尾巴火焰熄咗，但其實我知你永遠都會喺度。我會更加努力去相信你，因為你值得呢。", img: "https://www.pngmart.com/files/13/Pokemon-Charmander-PNG-HD.png" },
-            { title: "B，原諒我啦 ♡", msg: "我好鍾意你，想同你繼續呢場 Pokémon 冒險。<br>可唔可以... 氹返我呀？", img: "https://wallpapers-clan.com/wp-content/uploads/2025/01/cute-charmander-pirate-sticker-preview.jpg", final: true }
+            { title: "喂！我的小火龍 ♡", msg: "你知唔知，你成日都好似小火龍咁可愛，尾巴上的火焰永遠都咁溫暖，照亮晒我嘅世界～" },
+            { title: "你對我好重要好重要架!", msg: "你唔單止係我最最最喜歡嘅拍檔！無咗你，我嘅冒險就會少咗好多樂趣同動力架啦。" },
+            { title: "你係我成長同努力的動力", msg: "因為有你，我先想變得更好、更強！我想同你一齊進化到最高形態，一起打敗所有難關。" },
+            { title: "我會努力信任你", msg: "有時我會擔心尾巴火焰熄咗，但其實我知你永遠都會喺度。我會更加努力去相信你，因為你值得呢。" },
+            { title: "B，原諒我啦 ♡", msg: "我好鍾意你，想同你繼續呢場 Pokémon 冒險。<br>可唔可以... 氹返我呀？", final: true }
         ];
 
         let currentStep = 0;
         const charmander = document.getElementById('charmander');
-        const bubble = document.getElementById('bubble');
-        const titleEl = document.getElementById('title');
-        const msgEl = document.getElementById('message');
+        const bubblesContainer = document.getElementById('bubbles');
+        const container = document.getElementById('container');
         const bigHeart = document.getElementById('bigHeart');
 
-        // 起始顯示第一隻小火龍（可愛站立）
-        charmander.style.backgroundImage = `url('${messages[0].img}')`;
+        // 自動顯示第一句
+        function addBubble(step) {
+            const bubble = document.createElement('div');
+            bubble.classList.add('speech-bubble');
+            if (step.final) bubble.classList.add('heart');
+            bubble.innerHTML = `<h1>${step.title}</h1><p>${step.msg}</p>`;
+            bubblesContainer.appendChild(bubble);
+            setTimeout(() => { bubble.style.opacity = 1; }, 100);
+
+            if (step.final) {
+                bigHeart.style.opacity = 1;
+            }
+        }
+
+        addBubble(messages[0]);
+        currentStep = 1;
 
         charmander.addEventListener('click', () => {
             if (currentStep >= messages.length) return;
 
-            // 先用行走GIF跳落
-            charmander.style.backgroundImage = "url('https://i.pinimg.com/originals/70/dc/a3/70dca3d991a01040f7cf191d063e918b.gif')";
-            
-            // 向下落一格（每格約150px）
-            charmander.style.top = (100 + currentStep * 150 + 150) + 'px';
+            // 小火龍跳落一格
+            charmander.style.marginTop = (currentStep * 300) + 'px';
 
-            setTimeout(() => {
-                const step = messages[currentStep + 1]; // 因為第0步已顯示
-                if (!step) return;
+            // 加新氣泡
+            addBubble(messages[currentStep]);
 
-                // 停低換靜止圖
-                charmander.style.backgroundImage = `url('${step.img}')`;
+            // 自動 smooth scroll 落去見到新氣泡
+            container.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
-                // 顯示氣泡
-                titleEl.textContent = step.title;
-                msgEl.innerHTML = step.msg;
-                bubble.style.opacity = 1;
-
-                // 氣泡跟住小火龍位置
-                bubble.style.top = (130 + currentStep * 150 + 150) + 'px';
-
-                // 最後一句特別效果
-                if (step.final) {
-                    bubble.classList.add('heart');
-                    bigHeart.style.opacity = 1;
-                }
-
-                currentStep++;
-            }, 1600); // 跳落時間
+            currentStep++;
         });
-
-        // 自動顯示第一句氣泡
-        setTimeout(() => {
-            titleEl.textContent = messages[0].title;
-            msgEl.innerHTML = messages[0].msg;
-            bubble.style.opacity = 1;
-            currentStep = 1; // 下次按就從第2句開始
-        }, 1000);
     </script>
 </body>
 </html>
