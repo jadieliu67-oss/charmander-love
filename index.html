@@ -11,41 +11,56 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden; /* 禁止滾動，像 App 一樣 */
+            overflow: hidden; /* 禁止滾動 */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(to bottom, #2c3e50, #3498db); /* 雪夜漸層 */
+            /* 溫暖的卡通日落漸層背景 */
+            background: linear-gradient(to bottom, #FF9A44, #FC6076);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            -webkit-tap-highlight-color: transparent;
+            -webkit-tap-highlight-color: transparent; /* 移除手機點擊時的藍框 */
         }
 
-        /* --- 雪花特效容器 --- */
-        #snow-container {
+        /* --- 暖光粒子特效容器 --- */
+        #warm-particles {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* 讓點擊可以穿透雪花 */
+            pointer-events: none;
             z-index: 1;
+            overflow: hidden;
         }
 
-        .snowflake {
+        /* 粒子樣式 */
+        .particle {
             position: absolute;
-            top: -10px;
-            background-color: white;
+            bottom: -20px; /* 從底部升起 */
+            background-color: rgba(255, 235, 180, 0.8); /* 柔和的淡黃光 */
             border-radius: 50%;
-            opacity: 0.8;
-            animation: fall linear infinite;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); /* 發光效果 */
+            animation: floatUp linear infinite;
         }
 
-        @keyframes fall {
-            to { transform: translateY(110vh); }
+        /* 粒子上升動畫 */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.8;
+            }
+            100% {
+                /* 上升到頂部並旋轉 */
+                transform: translateY(-110vh) rotate(360deg);
+                opacity: 0;
+            }
         }
 
-        /* --- 主要互動區 --- */
+        /* --- 主要互動區 (保持在最上層) --- */
         .game-area {
             position: relative;
             z-index: 10;
@@ -54,53 +69,60 @@
             align-items: center;
             width: 100%;
             max-width: 400px;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
-        /* --- 對話框樣式 (RPG Game Style) --- */
+        /* --- 對話框樣式 (RPG 風格) --- */
         .dialogue-box {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            width: 80%;
-            min-height: 80px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.95); /* 微透明白色背景 */
+            border-radius: 25px;
+            padding: 25px 30px;
+            width: 85%;
+            min-height: 90px;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 35px rgba(194, 69, 43, 0.3); /* 暖色系陰影 */
             position: relative;
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translateY(30px) scale(0.9);
+            /* 彈性動畫效果 */
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
+            border: 3px solid #FFCB77; /* 增加一個可愛的邊框 */
         }
 
         .dialogue-box.show {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
 
+        /* 對話框下方的小三角形箭頭 */
         .dialogue-box::after {
             content: '';
             position: absolute;
-            bottom: -10px;
+            bottom: -15px;
             left: 50%;
             transform: translateX(-50%);
-            border-width: 10px 10px 0;
+            border-width: 15px 15px 0;
             border-style: solid;
-            border-color: white transparent;
+            border-color: #FFCB77 transparent; /* 配合邊框顏色 */
         }
 
         .message-text {
-            color: #333;
-            font-size: 1.1rem;
-            font-weight: 600;
-            line-height: 1.5;
+            color: #5A3F37; /* 深啡色文字，比較柔和 */
+            font-size: 1.2rem;
+            font-weight: 700;
+            line-height: 1.6;
+            letter-spacing: 0.5px;
         }
 
         /* 特別強調的文字顏色 */
         .highlight {
-            color: #e74c3c; /* 紅色 */
+            color: #FF5733; /* 鮮豔的橙紅色 */
+            font-size: 1.3rem;
         }
 
         /* --- 小火龍角色容器 --- */
@@ -108,56 +130,60 @@
             cursor: pointer;
             position: relative;
             transition: transform 0.1s;
+            /* 這裡設定一個基底動畫，讓他看起來在呼吸/輕微浮動 */
+            animation: floatChar 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatChar {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-8px); }
         }
 
         .character-container:active {
-            transform: scale(0.95); /* 點擊時縮小 */
+            transform: scale(0.95) !important; /* 點擊時縮小 */
         }
 
         /* 小火龍圖片樣式 */
         .charmander-img {
-            width: 180px;
+            width: 200px; /* 稍微調大一點 */
             height: auto;
-            /* 簡單的 CSS 動畫模擬走路的彈跳感 */
-            animation: bounce 0.8s infinite alternate ease-in-out;
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.3));
+            /* 增加柔和的發光濾鏡，讓他看起來更溫暖 */
+            filter: drop-shadow(0 10px 20px rgba(255, 100, 50, 0.4));
         }
 
-        @keyframes bounce {
-            from { transform: translateY(0); }
-            to { transform: translateY(-10px); }
-        }
-
-        /* 點擊時的特效動畫 Class */
+        /* 點擊時的特效動畫 Class (被撞了一下的感覺) */
         .bump {
-            animation: bump-anim 0.3s ease-out;
+            animation: bump-anim 0.4s ease-out;
         }
 
         @keyframes bump-anim {
             0% { transform: scale(1); }
-            50% { transform: scale(1.1) rotate(5deg); }
+            40% { transform: scale(1.15) rotate(-5deg); }
+            80% { transform: scale(0.95) rotate(3deg); }
             100% { transform: scale(1); }
         }
 
         /* --- 提示文字 --- */
         .hint {
-            margin-top: 40px;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.2);
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0% { opacity: 0.4; }
-            50% { opacity: 1; }
-            100% { opacity: 0.4; }
+            0% { opacity: 0.6; transform: scale(0.98); }
+            50% { opacity: 1; transform: scale(1.02); }
+            100% { opacity: 0.6; transform: scale(0.98); }
         }
 
     </style>
 </head>
 <body>
 
-    <div id="snow-container"></div>
+    <div id="warm-particles"></div>
 
     <div class="game-area">
         <div class="dialogue-box" id="dialogueBox">
@@ -165,42 +191,54 @@
         </div>
 
         <div class="character-container" id="character" onclick="nextMessage()">
-            
-            <img src="https://media.tenor.com/fTTVGyg1ZzkAAAAi/charmander-pokemon.gif" alt="Charmander" class="charmander-img">
+            <img src="data:image/gif;base64,R0lGODlhZABkAPcAAP////7+/v39/fz8/Pv7+/r6+vn5+fj4+Pf39/b29vX19fPz8/Ly8vHx8fDw8O/v7+7u7u3t7ezs7Orq6unp6ejo6Ofn5+bm5uXl5eTk5OPj49/f397e3t3d3dzc3Nvb29ra2tnZ2djY2NfX19bW1tTU1NPT09LS0tHR0dDQ0M/Pz87Ozs3NzcLCwsHBwcDAwL+/v76+vr29vby8vLu7u7q6uri4uLe3t7a2trW1tbS0tLOzs7KysrGxsa+vr66urq2traqqqqmpqaioqKdnZ2ZmZmVlZWNjY2JiYmFhYWBgYF9fX15eXlxcXFtbW1paWllZWVhYWFdXV1ZWVlVVVVNTU1JSUlFRUVBQUFFRUU9PT0xMTEtLS0pKSklJSUhISEdHR0ZGRkVFRUREREJCQkFBQUA/Pz8/Pz4+Pj09PTw8PDs7OzkkJCQkJCQjIyMiIiIhISEgICAfHx8eHh4dHR0cHBwbGxsaGhoZGRkXFxcWFhYVFRUUFBQTExMSkpIREREREREEBAQDAwMCAgIBAQEAAAD/AP8A/wAAAP8A/wD/AAAA/wD/AP8AAAD/AP8A/wAAAP8A/wD/AAAA/wD/AP8AAAD/AP8A/wAAAP8A/wD/AAAA/wD/AP8AAAD/AP8A/wAAAP8A/wD/AAAA/wD/AP8AAAD/AP8A/wAAAP8A/wD/AAAA/wD/AP8AAAD/AP8A/wAAAP8A/wD/AAAA/wD/AP8AAAD/AP8A/wAAAP8A/wD/AAAA/wD/AP8AAAD/AP8A/wAAAP8A/wD/AAAA/wD/AP8AAAD/AP8A/wAAAP8A/wD/AAAA/wD/AP8AAAD/AP8A/wAAAP8A/wD/AAAA/wD/AP8AAAD/AP8A/wAAAP8A/wD/AAAA/wD/AP8AAAD/AP8A/wAAAP8A/wD/AAAA/wD/AP8AAAD/AP8A/wAAAP8A/wD/AAAA/wD/AP8AAAD/AP8A/wAAAP8A/wD/AAAA/wD/AP8AAAD/AP8A/wAAAP8A/wD/AAAA/wD/AP8AAAD/AP8A/wAAAP8A/wD/AAAA/wD/AP8AAAD/AP8A/wAAAP8A/wD/AAAA/wD/AP8AAAD/AP8A/wAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQEBwD/ACwAAAAAZABkAAAI/wD/CRxIsKDBgwgTKlzIsKHDhxAjSpxIsaLFixgzatzIsaPHjyBDihxJsqTJkyhTqlzJsqXLlzBjypxJs6bNmzhz6tzJs6fPn0CDCh1KtKjRo0iTKl3KtKnTp1CjSp1KtarVq1izat3KtavXr2DDih1LtqzZs2jTql3Ltq3bt3Djyp1Lt67du3jz6t3Lt6/fv4ADCx5MuLDhw4gTK17MuLHjx5AjS55MubLly5gza97MubPnz6BDix5NurTp06hTq17NurXr17Bjy55Nu7bt27hz697Nu7fv38CDCx9OvLjx48iTK1/OvLnz59CjS59Ovbr169iza9/Ovbv37+DDi6EfT768+fPo06tfz769+/fw48ufT7++fXsA3uvfz7+///8ABijggAQWaOCBCCao4IIMNujggxBGKOGEFFZo4YUYZqjhhhx26OGHIIYo4ogklmjiiSimqOKKLLbo4ou/BAQAIfkEBQcAAAAsBQANAFYAQQAACP8A/wkcSLCgwYMIEypcyLChw4cQI0qcSLGiRYYKM2rcOBEAx48eB4wcSbJkyJIoU6ZcCaCly5cwY8qcSbOmzZs4c+rcybOnz59AgwodSrSo0aNIkypdyrSp06dQo0qdSrWq1atYs2rdyrWr169gw4odS7as2bNo06pdy7at27dw48qdS7eu3bt48+rdy7ev37+AAwseTLiw4cOIEytezLix48eQI0ueTLmy5cuYM2vezLmz58+gQ4seTbq06dOoU6tezbq169ewY8ueTbu27du4c+vezbu379/AgwsfTry48ePIkytfzry58+fQo0ufTr269evYs2vfzr279+/gw4sLH0++vPnz6NOrX8++vfv38OPLn0+/vv377gUEACH5BAUHAAAALAUADQBWAEAAAAj/AP8JHEiwoMGDCBMqXMiwocOHECNKnEixosWJADJq3Lhx48SPHzmQHEnSZAaTKFOmDEAzpcuXMGPKnEmzps2bOHPq3Mmzp8+fQIMKHUq0qNGjSJMqXcq0qdOnUKNKnUq1qtWrWLNq3cq1q9evYMOKHUu2rNmzaNOqXcu2rdu3cOPKnUu3rt27ePPq3cu3r9+/gAMLHky4sOHDiBMrXsy4sePHkCNLnky5suXLmDNr3sy5s+fPoEOLHk26tOnTqFOrXs26tevXsGPLnk27tu3buHPr3s27t+/fwIMLH068uPHjyJMrX868ufPn0KNLn069uvXr2LNr3869u/fv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" alt="Charmander" class="charmander-img">
         </div>
 
         <div class="hint">點一下小火龍 (Tap Me!)</div>
     </div>
 
     <script>
-        // --- 1. 雪花生成邏輯 ---
-        function createSnow() {
-            const container = document.getElementById('snow-container');
-            const snowflake = document.createElement('div');
-            snowflake.classList.add('snowflake');
+        // --- 1. 暖光粒子生成邏輯 ---
+        function createParticle() {
+            const container = document.getElementById('warm-particles');
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
             
-            // 隨機位置與大小
-            snowflake.style.left = Math.random() * 100 + 'vw';
-            snowflake.style.width = (Math.random() * 5 + 2) + 'px';
-            snowflake.style.height = snowflake.style.width;
+            // 隨機位置 (寬度)
+            particle.style.left = Math.random() * 100 + 'vw';
             
-            // 隨機動畫時間
-            const duration = Math.random() * 3 + 2;
-            snowflake.style.animationDuration = duration + 's';
+            // 隨機大小 (製造景深感)
+            const size = Math.random() * 15 + 5; // 5px 到 20px
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+
+            // 隨機顏色微調 (讓光點有層次)
+            const hue = Math.random() * 40 + 30; // 30(橙) 到 70(黃)
+            particle.style.backgroundColor = `hsla(${hue}, 100%, 70%, 0.6)`;
+            particle.style.boxShadow = `0 0 ${size}px hsla(${hue}, 100%, 50%, 0.8)`;
             
-            container.appendChild(snowflake);
+            // 隨機動畫時間 (飄浮速度)
+            const duration = Math.random() * 5 + 5; // 5s 到 10s
+            particle.style.animationDuration = duration + 's';
+            // 隨機延遲，讓粒子不是同時出現
+            particle.style.animationDelay = Math.random() * 2 + 's';
+            
+            container.appendChild(particle);
 
             // 動畫結束後移除元素，避免記憶體洩漏
             setTimeout(() => {
-                snowflake.remove();
-            }, duration * 1000);
+                particle.remove();
+            }, (duration + 2) * 1000);
         }
 
-        // 每 100 毫秒產生一片雪花
-        setInterval(createSnow, 100);
+        // 持續產生粒子 (每 300 毫秒產生一個，不用太多，保持柔和感)
+        setInterval(createParticle, 300);
+        // 一開始先產生一些，避免畫面太空
+        for(let i=0; i<10; i++) createParticle();
 
-        // --- 2. 對話內容設定 (廣東話) ---
-        // 你可以在這裡修改你想說的話
+
+        // --- 2. 對話內容設定 (廣東話 - 保持不變) ---
+        // 記得在這裡修改你們的專屬對話！
         const messages = [
             "喂～ 仲嬲緊呀？🥺",
             "哩度好凍呀... 🥶<br>但我個心仲凍過雪地...",
@@ -218,30 +256,28 @@
         const character = document.getElementById('character');
         const hint = document.querySelector('.hint');
 
-        // --- 3. 互動邏輯 ---
+        // --- 3. 互動邏輯 (保持不變) ---
         function nextMessage() {
-            // 增加索引
             currentIndex++;
 
-            // 如果是對話結束，重置或顯示最後一句
             if (currentIndex >= messages.length) {
-                currentIndex = 0; // 循環播放，或者你可以改成停在最後一句
+                currentIndex = 0; 
             }
 
             // 1. 小火龍動態：加入 bump class 產生彈跳效果
             character.classList.remove('bump');
-            void character.offsetWidth; // 觸發重繪 (Reflow)
+            void character.offsetWidth; // 觸發重繪
             character.classList.add('bump');
 
-            // 2. 對話框動畫：先隱藏，改字，再顯示
+            // 2. 對話框動畫
             dialogueBox.classList.remove('show');
             
             setTimeout(() => {
                 messageText.innerHTML = messages[currentIndex];
                 dialogueBox.classList.add('show');
-            }, 200);
+            }, 250); // 稍微延遲一點點顯示，配合動畫
 
-            // 隱藏提示文字，讓畫面更乾淨
+            // 隱藏提示文字
             if(currentIndex === 0) {
                 hint.style.display = 'none';
             }
