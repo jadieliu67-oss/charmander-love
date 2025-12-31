@@ -42,44 +42,47 @@
         .instruction {
             font-size: 18px;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             text-shadow: 0 1px 5px rgba(0,0,0,0.3);
             background: rgba(255,255,255,0.6);
             padding: 12px 20px;
             border-radius: 30px;
         }
-        .charmander-container {
+        .message-row {
             display: flex;
-            justify-content: flex-start;
             align-items: flex-end;
-            margin-bottom: 30px;
+            margin-bottom: 50px;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+        .charmander-container {
+            flex-shrink: 0;
+            width: 160px;
+            height: 160px;
             cursor: pointer;
         }
         .charmander {
-            width: 160px; /* 縮小咗，佔比少啲 */
+            width: 160px;
             height: 160px;
-            background-image: url('https://p1.hiclipart.com/preview/896/336/40/charmender-render-pokemon-charmander-png-clipart.jpg');
+            background-image: url('https://wallpapers-clan.com/wp-content/uploads/2024/12/charmander-pokemon-cute-sticker-preview.jpg');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            animation: bounce 0.6s ease-in-out; /* 跳跳效果 */
+            animation: bounce 0.6s ease-in-out;
         }
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+            50% { transform: translateY(-25px); }
         }
         .speech-bubble {
-            margin-left: 180px; /* 跟小火龍位置 */
+            margin-left: 20px;
             background: rgba(255, 255, 255, 0.92);
             color: #333;
-            padding: 22px 35px;
+            padding: 22px 32px;
             border-radius: 30px;
-            max-width: 90%; /* 更闊 */
-            align-self: flex-start;
-            opacity: 0;
-            transition: opacity 1s;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            max-width: 90%;
             position: relative;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
         }
         .speech-bubble::after {
             content: '';
@@ -107,7 +110,7 @@
         .big-heart {
             font-size: 70px;
             text-align: center;
-            margin: 50px 0;
+            margin: 60px 0;
             animation: pulse 1.5s infinite;
             opacity: 0;
         }
@@ -116,11 +119,6 @@
             50% { transform: scale(1.3); }
             100% { transform: scale(1); }
         }
-        .message-container {
-            display: flex;
-            flex-direction: column;
-            min-height: 70vh;
-        }
     </style>
 </head>
 <body>
@@ -128,12 +126,7 @@
     <div class="app-container">
         <div class="instruction">按一下小火龍聽佢講下一句話呀 ♡</div>
         
-        <div class="message-container" id="messageContainer">
-            <div class="charmander-container" id="charmanderContainer">
-                <div class="charmander"></div>
-            </div>
-            <div id="currentBubble"></div>
-        </div>
+        <div id="currentMessage"></div>
         
         <div class="big-heart" id="bigHeart">❤️</div>
     </div>
@@ -156,32 +149,49 @@
             { title: "喂！我的小火龍 ♡", msg: "你知唔知，你成日都好似小火龍咁可愛，尾巴上的火焰永遠都咁溫暖，照亮晒我嘅世界～" },
             { title: "你對我好重要好重要架!", msg: "你唔單止係我最最最喜歡嘅拍檔！無咗你，我嘅冒險就會少咗好多樂趣同動力架啦。" },
             { title: "你係我成長同努力的動力", msg: "因為有你，我先想變得更好、更強！我想同你一齊進化到最高形態，一起打敗所有難關。" },
-            { title: "我會努力信任你", msg: "有時我會擔心尾巴火焰熄咗，但其實我知你永遠都會喺度。我會更加努力去相信你，因為你值得呢。" },
-            { title: "B，原諒我啦 ♡", msg: "我好鍾意你，想同你繼續呢場 Pokémon 冒險。<br>可唔可以... 氹返我呀？", final: true }
+            { title: "我會努力信任你", msg: "有時我會擔心尾巴火焰熄咗，但其實我知你永遠都會喺度。我會更加努力去相信你，因為你值得呢～" },
+            { title: "B，原諒我啦 ♡", msg: "我好鍾意你，想同你繼續呢場冒險。<br>可唔可以... 比我氹返呀？", final: true }
         ];
 
         let currentStep = 0;
-        const charmanderContainer = document.getElementById('charmanderContainer');
-        const currentBubbleContainer = document.getElementById('currentBubble');
+        const currentMessageContainer = document.getElementById('currentMessage');
         const bigHeart = document.getElementById('bigHeart');
 
         function showMessage(step) {
-            // 清空舊氣泡
-            currentBubbleContainer.innerHTML = '';
+            // 清空舊內容
+            currentMessageContainer.innerHTML = '';
 
-            // 新氣泡
+            // 新一行並排
+            const row = document.createElement('div');
+            row.classList.add('message-row');
+
+            // 小火龍
+            const charmanderDiv = document.createElement('div');
+            charmanderDiv.classList.add('charmander-container');
+            charmanderDiv.innerHTML = '<div class="charmander"></div>';
+            row.appendChild(charmanderDiv);
+
+            // 氣泡
             const bubble = document.createElement('div');
             bubble.classList.add('speech-bubble');
             if (step.final) bubble.classList.add('heart');
             bubble.innerHTML = `<h1>${step.title}</h1><p>${step.msg}</p>`;
-            currentBubbleContainer.appendChild(bubble);
+            row.appendChild(bubble);
 
-            // 淡入
-            setTimeout(() => { bubble.style.opacity = 1; }, 100);
+            currentMessageContainer.appendChild(row);
+
+            // 淡入 + 彈跳
+            setTimeout(() => { 
+                row.style.opacity = 1; 
+                const charmander = row.querySelector('.charmander');
+                charmander.style.animation = 'none';
+                charmander.offsetHeight;
+                charmander.style.animation = 'bounce 0.6s ease-in-out';
+            }, 100);
 
             if (step.final) bigHeart.style.opacity = 1;
 
-            // 自動滾到最新位置
+            // 自動滾落
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }
 
@@ -189,19 +199,12 @@
         showMessage(messages[0]);
         currentStep = 1;
 
-        // 按小火龍：彈跳 + 下一句
-        charmanderContainer.addEventListener('click', () => {
-            if (currentStep >= messages.length) return;
-
-            // 加彈跳動畫
-            const charmander = charmanderContainer.querySelector('.charmander');
-            charmander.style.animation = 'none';
-            charmander.offsetHeight; // 觸發重繪
-            charmander.style.animation = 'bounce 0.6s ease-in-out';
-
-            showMessage(messages[currentStep]);
-
-            currentStep++;
+        // 按小火龍觸發下一句
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.charmander-container') && currentStep < messages.length) {
+                showMessage(messages[currentStep]);
+                currentStep++;
+            }
         });
     </script>
 </body>
