@@ -17,9 +17,9 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            /* 使用你提供的插畫作為背景，並加入漸層濾鏡確保文字清晰 */
-            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), 
-                        url('https://i.pinimg.com/736x/21/e2/0f/21e20f305b380295834927770e284988.jpg');
+            /* 換上穩定的卡通雪景背景圖 */
+            background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), 
+                        url('https://img.freepik.com/free-vector/winter-landscape-with-pines-snow-sunset_1048-11110.jpg');
             background-size: cover;
             background-position: center;
         }
@@ -36,41 +36,10 @@
             top: -10px;
             background: white;
             border-radius: 50%;
-            opacity: 0.8;
+            opacity: 0.9;
             animation: fall linear infinite;
         }
         @keyframes fall { to { transform: translateY(110vh); } }
-
-        /* 火堆動畫 (Campfire) */
-        .campfire {
-            position: absolute;
-            bottom: 10%;
-            right: 15%;
-            z-index: 5;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .flame {
-            width: 35px;
-            height: 35px;
-            background: #ff5e00;
-            border-radius: 50% 0 50% 50%;
-            transform: rotate(-45deg);
-            animation: flicker 0.15s infinite alternate;
-            box-shadow: 0 0 20px #ff4500, 0 0 40px #ffcc00;
-        }
-        @keyframes flicker {
-            0% { transform: rotate(-45deg) scale(1); opacity: 0.8; }
-            100% { transform: rotate(-45deg) scale(1.2); opacity: 1; }
-        }
-        .log {
-            width: 45px;
-            height: 8px;
-            background: #5d4037;
-            border-radius: 4px;
-            margin-top: -5px;
-        }
 
         /* 遊戲區域 */
         .game-area {
@@ -83,15 +52,15 @@
             max-width: 400px;
         }
 
-        /* 對話框 - 回復第一版的可愛感 */
+        /* 對話框 - 保持第一版的可愛感 */
         .dialogue-box {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 20px;
-            width: 80%;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 25px;
+            padding: 25px;
+            width: 85%;
             min-height: 80px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            margin-bottom: 40px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
             position: relative;
             opacity: 0;
             transform: translateY(20px);
@@ -100,7 +69,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            border: 3px solid #FFCB77;
+            border: 4px solid #FFCB77;
         }
         .dialogue-box.show {
             opacity: 1;
@@ -109,19 +78,19 @@
         .dialogue-box::after {
             content: '';
             position: absolute;
-            bottom: -12px;
+            bottom: -15px;
             left: 50%;
             transform: translateX(-50%);
-            border-width: 12px 12px 0;
+            border-width: 15px 15px 0;
             border-style: solid;
             border-color: #FFCB77 transparent;
         }
 
         .message-text {
-            color: #333;
-            font-size: 1.15rem;
-            font-weight: 600;
-            line-height: 1.5;
+            color: #444;
+            font-size: 1.2rem;
+            font-weight: 700;
+            line-height: 1.6;
         }
         .highlight { color: #e74c3c; font-weight: bold; }
 
@@ -133,33 +102,31 @@
         }
         .character-container:active { transform: scale(0.9); }
         .charmander-img {
-            width: 140px;
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.3));
-            animation: breathe 2s infinite ease-in-out;
+            width: 160px; /* 稍微加大一點更可愛 */
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+            animation: breathe 3s infinite ease-in-out;
         }
         @keyframes breathe {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.08); }
         }
 
         .hint {
-            margin-top: 20px;
-            color: white;
-            font-size: 0.9rem;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+            margin-top: 25px;
+            color: #333;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: bold;
             animation: pulse 2s infinite;
         }
-        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+        @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
     </style>
 </head>
 <body>
 
     <div id="snow-container"></div>
-
-    <div class="campfire">
-        <div class="flame"></div>
-        <div class="log"></div>
-    </div>
 
     <div class="game-area">
         <div class="dialogue-box" id="dialogueBox">
@@ -180,15 +147,16 @@
             const snowflake = document.createElement('div');
             snowflake.className = 'snowflake';
             snowflake.style.left = Math.random() * 100 + 'vw';
-            const size = Math.random() * 4 + 2;
+            const size = Math.random() * 5 + 3;
             snowflake.style.width = size + 'px';
             snowflake.style.height = size + 'px';
-            const duration = Math.random() * 3 + 2;
+            const duration = Math.random() * 4 + 3;
             snowflake.style.animationDuration = duration + 's';
+            snowflake.style.opacity = Math.random();
             container.appendChild(snowflake);
             setTimeout(() => snowflake.remove(), duration * 1000);
         }
-        setInterval(createSnow, 150);
+        setInterval(createSnow, 100);
 
         // 第一版對話內容 (廣東話)
         const messages = [
@@ -212,12 +180,20 @@
             if (currentIndex >= messages.length) currentIndex = 0;
 
             dialogueBox.classList.remove('show');
+            
+            // 加入點擊時的小震動
+            const char = document.getElementById('character');
+            char.style.transform = 'scale(0.9)';
+            setTimeout(() => char.style.transform = 'scale(1)', 100);
+
             setTimeout(() => {
                 messageText.innerHTML = messages[currentIndex];
                 dialogueBox.classList.add('show');
             }, 200);
 
-            if(currentIndex === 0) hint.style.display = 'none';
+            if(currentIndex === 0) {
+                hint.style.visibility = 'hidden';
+            }
         }
     </script>
 </body>
